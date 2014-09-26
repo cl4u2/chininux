@@ -29,6 +29,8 @@ class row():
             except ValueError,e :
                 #print "bad network: %s [%s]" % (v, e)
                 continue
+            except AttributeError:
+                continue
             if address in subnet:
                 r += 1.0
         return r
