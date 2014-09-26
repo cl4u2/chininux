@@ -82,9 +82,10 @@ class AddressDirectory():
         "fetch an URL content and return a list of corresponding row objects"
         html_doc = urllib2.urlopen(url)
         soup = BeautifulSoup(html_doc)
+        pagetitle = soup.find("title")
         currentsection = ""
         for t in soup.find_all("table"):
-            titles = [t.find_previous(tag) for tag in ["h1", "h2", "h3"]]
+            titles = [pagetitle] + [t.find_previous(tag) for tag in ["h1", "h2", "h3"]]
             currentsection = "\n".join([title.get_text() for title in titles if title != None])
             self.rows.extend(self.__processtable(t, currentsection))
     def start(self):
