@@ -13,19 +13,30 @@ GIURLS = ["http://wiki.ninux.org/GestioneIndirizzi",
          ]
 
 class Row():
+    def __cleanlabel(self, label):
+        return label.replace(' ', '_').replace('.', '_').replace('/', '_').strip()
     def __init__(self, section, labels):
         self.section = section # the name of the page section
-        self.labels = labels # keep 'em sorted
+        self.labels = [self.__cleanlabel(l) for l in labels] # to preserve the order of the table columns
     def __setattr__(self, name, value):
-        try:
-            v = value.strip()
-            subnet = ip_network(unicode(v), strict=False)
-            self.__dict__[name] = subnet
-        except ValueError,e :
-            #print "bad network: %s [%s]" % (v, e)
-            self.__dict__[name] = value
-        except:
-            self.__dict__[name] = value
+        n = self.__cleanlabel(name)
+        if '-' in value:
+            self.__dict__[n] = value
+            i = 0
+            for v in value.split('-'):
+                n = "%s_%s" % (n, i)
+                setattr(self, n, v)
+                i+=1
+        else:
+            try:
+                v = value.strip()
+                subnet = ip_network(unicode(v), strict=False)
+                self.__dict__[n] = subnet
+            except ValueError,e :
+                #print "bad network: %s [%s]" % (v, e)
+                self.__dict__[n] = value
+            except:
+                self.__dict__[n] = value
     def search(self, q):
         "search q in all field values and return a similarity ratio"
         try:
@@ -66,7 +77,7 @@ class AddressDirectory():
         for tr in table.find_all('tr'):
             tds = tr.find_all('td')
             if len(labels) == 0:
-                labels = [td.get_text().replace(' ', '_').replace('.', '_') for td in tds]
+                labels = [td.get_text() for td in tds]
             else:
                 r = Row(currentsection, labels)
                 for i in range(len(tds)):
