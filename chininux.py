@@ -51,7 +51,7 @@ class Row():
                 continue
             # v is a network
             if address in v:
-                r += 1.0
+                r += 1.0 * v.prefixlen / v.max_prefixlen
         return r
     def __repr__(self):
         r = ""
