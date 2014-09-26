@@ -5,7 +5,12 @@ from bs4 import BeautifulSoup
 import sys
 from ipaddress import *
 
-GIURL = "http://wiki.ninux.org/GestioneIndirizzi"
+GIURLS = ["http://wiki.ninux.org/GestioneIndirizzi",
+          "http://wiki.ninux.org/IndirizziCalabria",
+          "http://wiki.ninux.org/Firenze/GestioneIndirizzi",
+          "http://wiki.ninux.org/IndirizziMarche",
+          "http://wiki.ninux.org/indirizzi-sicilia"
+         ]
 
 class row():
     def __init__(self, section, labels):
