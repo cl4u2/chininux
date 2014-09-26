@@ -55,10 +55,7 @@ for table in tables:
                     label = labels[i]
                 except IndexError:
                     continue
-                try:
-                    data = next(tds[i].strings)
-                except StopIteration:
-                    continue
+                data = tds[i].get_text()
                 setattr(r, label, data)
             rows.append(r)
 
