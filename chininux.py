@@ -73,7 +73,8 @@ class AddressDirectory():
         soup = BeautifulSoup(html_doc)
         currentsection = ""
         for t in soup.find_all("table"):
-            currentsection = "\n".join([t.find_previous(tag).get_text() for tag in ["h1", "h2", "h3"]])
+            titles = [t.find_previous(tag) for tag in ["h1", "h2", "h3"]]
+            currentsection = "\n".join([title.get_text() for title in titles if title != None])
             self.rows.extend(self.__processtable(t, currentsection))
     def start(self):
         for url in self.urls:
