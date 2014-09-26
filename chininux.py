@@ -78,7 +78,7 @@ class Row():
             r += self.section.replace("\n", "\n  ")
             r += "\n\n"
         for label in self.labels:
-            r += "%s: %s\n" % (label, getattr(self, label))
+            r += "%s: %s\n" % (label.strip('_'), getattr(self, label))
         return r
     def __str__(self):
         return repr(self)
