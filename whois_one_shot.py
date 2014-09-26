@@ -2,8 +2,8 @@
 
 import urllib2
 from bs4 import BeautifulSoup
-import Levenshtein
 import sys
+from ipaddress import *
 
 
 GIURL = "http://wiki.ninux.org/GestioneIndirizzi"
@@ -15,11 +15,20 @@ class row():
         self.labels = labels # keep 'em sorted
     def search(self, q):
         "search q in all field values and return a similarity ratio"
-        maxsim = 0.0
+        try:
+            address = ip_address(unicode(q))
+        except:
+            return 0.0
+        r = 0.0
         for k, v in self.__dict__.iteritems():
-            r = Levenshtein.ratio(unicode(q), unicode(v))
-            maxsim = max(r, maxsim)
-        return maxsim
+            print "Search %s in %s" % (unicode(q), unicode(v))
+            try:
+                subnet = ip_network(unicode(v), strict=False)
+            except ValueError:
+                continue
+            if address in subnet:
+                r += 1.0
+        return r
     def __repr__(self):
         r = ""
         for label in self.labels:
