@@ -122,10 +122,9 @@ class AddressDirectory():
             self.retrieveandparse(url)
     def search(self, query):
         "return all the rows that match a query"
-        res = []
-        for row in self.rows:
-            if row.search(query) > 0.0:
-                res.append(row)
-        return res
+        queryresults = [(row.search(query), row) for row in self.rows]
+        queryresults = [(ratio, row) for (ratio, row) in queryresults if ratio > 0.0]
+        queryresults.sort(key=lambda tup: tup[0])
+        return [row for (ratio, row) in queryresults]
 
 
