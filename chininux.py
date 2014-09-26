@@ -16,6 +16,16 @@ class row():
     def __init__(self, section, labels):
         self.section = section # the name of the page section
         self.labels = labels # keep 'em sorted
+    def __setattr__(self, name, value):
+        try:
+            v = value.strip()
+            subnet = ip_network(unicode(v), strict=False)
+            self.__dict__[name] = subnet
+        except ValueError,e :
+            #print "bad network: %s [%s]" % (v, e)
+            self.__dict__[name] = value
+        except:
+            self.__dict__[name] = value
     def search(self, q):
         "search q in all field values and return a similarity ratio"
         try:
@@ -26,14 +36,10 @@ class row():
         for k, v in self.__dict__.iteritems():
             if k in ["section", "labels"]:
                 continue
-            try:
-                subnet = ip_network(unicode(v.strip()), strict=False)
-            except ValueError,e :
-                #print "bad network: %s [%s]" % (v, e)
+            if not type(v) is IPv4Network and not type(v) is IPv6Network:
                 continue
-            except AttributeError:
-                continue
-            if address in subnet:
+            # v is a network
+            if address in v:
                 r += 1.0
         return r
     def __repr__(self):
