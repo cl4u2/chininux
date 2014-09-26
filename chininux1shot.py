@@ -5,10 +5,13 @@ from bs4 import BeautifulSoup
 import sys
 from ipaddress import *
 
-
 GIURL = "http://wiki.ninux.org/GestioneIndirizzi"
 
-query = sys.argv[1]
+try:
+    query = sys.argv[1]
+except:
+    print "Usage: %s <IP address>" % sys.argv[0]
+    sys.exit(1)
 
 class row():
     def __init__(self, section, labels):
