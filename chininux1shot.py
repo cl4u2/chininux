@@ -17,14 +17,17 @@ class row():
     def search(self, q):
         "search q in all field values and return a similarity ratio"
         try:
-            address = ip_address(unicode(q))
+            address = ip_address(unicode(q.strip()))
         except:
             return 0.0
         r = 0.0
         for k, v in self.__dict__.iteritems():
+            if k in ["section", "labels"]:
+                continue
             try:
-                subnet = ip_network(unicode(v), strict=False)
-            except ValueError:
+                subnet = ip_network(unicode(v.strip()), strict=False)
+            except ValueError,e :
+                #print "bad network: %s [%s]" % (v, e)
                 continue
             if address in subnet:
                 r += 1.0
