@@ -67,7 +67,7 @@ soup = BeautifulSoup(html_doc)
 rows = []
 currentsection = ""
 for t in soup.find_all("table"):
-    currentsection = t.find_previous("h1").get_text() + "\n" + t.find_previous("h3").get_text()
+    currentsection = "\n".join([t.find_previous(tag).get_text() for tag in ["h1", "h2", "h3"]])
     rows.extend(processtable(t, currentsection))
 
 for row in rows:
