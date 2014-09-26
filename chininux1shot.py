@@ -46,10 +46,8 @@ for table in tables:
     labels = []
     for tr in table.find_all('tr'):
         tds = tr.find_all('td')
-        #print tds
         if len(labels) == 0:
             labels = [next(td.strings).replace(' ', '_').replace('.', '_') for td in tds]
-            #print labels
         else:
             r = row(labels)
             for i in range(len(tds)):
@@ -62,7 +60,6 @@ for table in tables:
                 except StopIteration:
                     continue
                 setattr(r, label, data)
-            #print r
             rows.append(r)
 
 
