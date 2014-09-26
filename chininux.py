@@ -12,7 +12,7 @@ GIURLS = ["http://wiki.ninux.org/GestioneIndirizzi",
           "http://wiki.ninux.org/indirizzi-sicilia"
          ]
 
-class row():
+class Row():
     def __init__(self, section, labels):
         self.section = section # the name of the page section
         self.labels = labels # keep 'em sorted
@@ -60,7 +60,7 @@ class AddressDirectory():
         self.urls = urls
         self.rows = []
     def __processtable(self, table, currentsection=""):
-        "return a list of row objects from a table"
+        "return a list of Row objects from a table"
         rrows = []
         labels = []
         for tr in table.find_all('tr'):
@@ -68,7 +68,7 @@ class AddressDirectory():
             if len(labels) == 0:
                 labels = [td.get_text().replace(' ', '_').replace('.', '_') for td in tds]
             else:
-                r = row(currentsection, labels)
+                r = Row(currentsection, labels)
                 for i in range(len(tds)):
                     try:
                         label = labels[i]
@@ -79,7 +79,7 @@ class AddressDirectory():
                 rrows.append(r)
         return rrows
     def retrieveandparse(self, url):
-        "fetch an URL content and return a list of corresponding row objects"
+        "fetch an URL content and return a list of corresponding Row objects"
         html_doc = urllib2.urlopen(url)
         soup = BeautifulSoup(html_doc)
         pagetitle = soup.find("title")
