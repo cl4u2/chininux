@@ -27,7 +27,7 @@ except:
     sys.exit(1)
 
 ad = AddressDirectory(GIURLS)
-ad.start()
+ad.refresh()
 for r in ad.search(query):
     print r
 

@@ -117,7 +117,7 @@ class AddressDirectory():
             titles = [pagetitle] + [t.find_previous(tag) for tag in ["h1", "h2", "h3"]]
             currentsection = "\n".join([title.get_text() for title in titles if title != None])
             self.rows.extend(self.__processtable(t, currentsection))
-    def start(self):
+    def refresh(self):
         for url in self.urls:
             self.retrieveandparse(url)
     def search(self, query):
