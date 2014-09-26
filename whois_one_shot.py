@@ -21,7 +21,6 @@ class row():
             return 0.0
         r = 0.0
         for k, v in self.__dict__.iteritems():
-            print "Search %s in %s" % (unicode(q), unicode(v))
             try:
                 subnet = ip_network(unicode(v), strict=False)
             except ValueError:
@@ -67,13 +66,7 @@ for table in tables:
             rows.append(r)
 
 
-bestrow = None
-bestvalue = 0.0
 for row in rows:
-    v = row.search(query)
-    if v > bestvalue:
-        bestrow = row
-        bestvalue = v
-
-print bestrow
+    if row.search(query) > 0.0:
+        print row
 
