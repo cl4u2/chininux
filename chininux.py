@@ -86,15 +86,4 @@ class AddressDirectory():
                 res.append(row)
         return res
 
-if __name__ == "__main__":
-    try:
-        query = sys.argv[1]
-    except:
-        print "Usage: %s <IP address>" % sys.argv[0]
-        sys.exit(1)
-
-    ad = AddressDirectory([GIURL])
-    ad.start()
-    for r in ad.search(query):
-        print r
 
