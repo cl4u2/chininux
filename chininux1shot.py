@@ -55,7 +55,7 @@ class AddressDirectory():
         for tr in table.find_all('tr'):
             tds = tr.find_all('td')
             if len(labels) == 0:
-                labels = [next(td.strings).replace(' ', '_').replace('.', '_') for td in tds]
+                labels = [td.get_text().replace(' ', '_').replace('.', '_') for td in tds]
             else:
                 r = row(currentsection, labels)
                 for i in range(len(tds)):
