@@ -30,7 +30,11 @@ class row():
                 r += 1.0
         return r
     def __repr__(self):
-        r = self.section
+        r = ""
+        if len(self.section) > 0:
+            r += "  "
+            r += self.section.replace("\n", "\n  ")
+            r += "\n\n"
         for label in self.labels:
             r += "%s: %s\n" % (label, getattr(self, label))
         return r
@@ -63,6 +67,7 @@ soup = BeautifulSoup(html_doc)
 rows = []
 currentsection = ""
 for t in soup.find_all("table"):
+    currentsection = t.find_previous("h1").get_text() + "\n" + t.find_previous("h3").get_text()
     rows.extend(processtable(t, currentsection))
 
 for row in rows:
