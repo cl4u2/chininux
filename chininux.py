@@ -67,11 +67,18 @@ class Record():
     def __repr__(self):
         r = ""
         if len(self.section) > 0:
-            r += "  "
-            r += self.section.replace("\n", "\n  ")
+            r += "% "
+            r += self.section.replace("\n", "\n% ")
             r += "\n\n"
         for label in self.labels:
-            r += "%s: %s\n" % (label.strip('_'), getattr(self, label))
+            goodlabel = label.strip('_').lower()
+            goodlabel = goodlabel.replace('_', '-')
+            goodlabel = '-'.join([word for word in goodlabel.split('-') if len(word) > 0])
+            goodlabel += ":"
+            goodvalue = str(getattr(self, label)).strip()
+            if len(goodvalue) == 0:
+                goodvalue = "-"
+            r += "{0:20} {1}\n".format(goodlabel, goodvalue)
         return r
     def __str__(self):
         return repr(self)
