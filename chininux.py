@@ -30,7 +30,7 @@ GIURLS = ["http://wiki.ninux.org/GestioneIndirizzi",
           "http://wiki.ninux.org/indirizzi-sicilia"
          ]
 
-class Row():
+class Record():
     def __cleanlabel(self, label):
         return label.replace(' ', '_').replace('.', '_').replace('/', '_').strip()
     def __init__(self, section, labels):
@@ -87,17 +87,17 @@ class AddressDirectory():
     def __init__(self, urls):
         "urls: list of URLs to fetch addresses from"
         self.urls = urls
-        self.rows = []
+        self.records = []
     def __processtable(self, table, currentsection=""):
-        "return a list of Row objects from a table"
-        rrows = []
+        "return a list of Record objects from a table"
+        rrecords = []
         labels = []
         for tr in table.find_all('tr'):
             tds = tr.find_all('td')
             if len(labels) == 0:
                 labels = [td.get_text() for td in tds]
             else:
-                r = Row(currentsection, labels)
+                r = Record(currentsection, labels)
                 for i in range(len(tds)):
                     try:
                         label = labels[i]
@@ -105,10 +105,10 @@ class AddressDirectory():
                         continue
                     data = tds[i].get_text()
                     setattr(r, label, data)
-                rrows.append(r)
-        return rrows
+                rrecords.append(r)
+        return rrecords
     def retrieveandparse(self, url):
-        "fetch an URL content and return a list of corresponding Row objects"
+        "fetch an URL content and populate a list of corresponding Record objects"
         html_doc = urllib2.urlopen(url)
         soup = BeautifulSoup(html_doc)
         pagetitle = soup.find("title")
@@ -116,15 +116,15 @@ class AddressDirectory():
         for t in soup.find_all("table"):
             titles = [pagetitle] + [t.find_previous(tag) for tag in ["h1", "h2", "h3"]]
             currentsection = "\n".join([title.get_text() for title in titles if title != None])
-            self.rows.extend(self.__processtable(t, currentsection))
+            self.records.extend(self.__processtable(t, currentsection))
     def refresh(self):
         for url in self.urls:
             self.retrieveandparse(url)
     def search(self, query):
-        "return all the rows that match a query"
-        queryresults = [(row.search(query), row) for row in self.rows]
-        queryresults = [(ratio, row) for (ratio, row) in queryresults if ratio > 0.0]
+        "return all the records that match a query"
+        queryresults = [(record.search(query), record) for record in self.records]
+        queryresults = [(ratio, record) for (ratio, record) in queryresults if ratio > 0.0]
         queryresults.sort(key=lambda tup: tup[0])
-        return [row for (ratio, row) in queryresults]
+        return [record for (ratio, record) in queryresults]
 
 
