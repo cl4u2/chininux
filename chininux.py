@@ -23,13 +23,6 @@ from bs4 import BeautifulSoup
 import sys
 from ipaddress import *
 
-GIURLS = ["http://wiki.ninux.org/GestioneIndirizzi",
-          "http://wiki.ninux.org/IndirizziCalabria",
-          "http://wiki.ninux.org/Firenze/GestioneIndirizzi",
-          "http://wiki.ninux.org/IndirizziMarche",
-          "http://wiki.ninux.org/indirizzi-sicilia"
-         ]
-
 class Record():
     def __cleanlabel(self, label):
         return label.replace(' ', '_').replace('.', '_').replace('/', '_').strip()

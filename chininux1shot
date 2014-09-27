@@ -19,6 +19,7 @@
 #
 
 from chininux import *
+from settings import GIURLS
 
 try:
     query = sys.argv[1]
