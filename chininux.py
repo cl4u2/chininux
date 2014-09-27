@@ -105,11 +105,8 @@ class AddressDirectory():
         if url.startswith("http://") or url.startswith("https://"):
             html_doc = urllib2.urlopen(url)
         elif url.startswith("file://"):
-            try:
-                filename = url[7:]
-                html_doc = open(filename)
-            except:
-                return
+            filename = url[7:]
+            html_doc = open(filename)
         else:
             return
         soup = BeautifulSoup(html_doc)
@@ -122,7 +119,11 @@ class AddressDirectory():
     def refresh(self):
         self.records = []
         for url in self.urls:
-            self.retrieveandparse(url)
+            try:
+                self.retrieveandparse(url)
+            except Exception, e:
+                print "could not retrieve url %s: %s" % (url, e)
+                continue
     def search(self, query):
         "return all the records that match a query"
         queryresults = [(record.search(query), record) for record in self.records]
