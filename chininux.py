@@ -22,6 +22,7 @@ import urllib2
 from bs4 import BeautifulSoup
 import sys
 from ipaddress import *
+import settings
 
 class Record():
     def __cleanlabel(self, label):
@@ -136,6 +137,7 @@ class AddressDirectory():
         queryresults = [(record.search(query), record) for record in self.records]
         queryresults = [(ratio, record) for (ratio, record) in queryresults if ratio > 0.0]
         queryresults.sort(key=lambda tup: tup[0])
-        return [record for (ratio, record) in queryresults]
+        results = [record for (ratio, record) in queryresults]
+        return [settings.headerstring] + results + [settings.footerstring]
 
 
