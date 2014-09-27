@@ -102,7 +102,16 @@ class AddressDirectory():
         return rrecords
     def retrieveandparse(self, url):
         "fetch an URL content and populate a list of corresponding Record objects"
-        html_doc = urllib2.urlopen(url)
+        if url.startswith("http://") or url.startswith("https://"):
+            html_doc = urllib2.urlopen(url)
+        elif url.startswith("file://"):
+            try:
+                filename = url[7:]
+                html_doc = open(filename)
+            except:
+                return
+        else:
+            return
         soup = BeautifulSoup(html_doc)
         pagetitle = soup.find("title")
         currentsection = ""
