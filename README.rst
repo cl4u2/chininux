@@ -36,7 +36,7 @@ Example::
 
 whois server
 ~~~~~~~~~~~~
-chininux-server is compliant with the whois protocol defined in RFC 3912.
+chininux-server is compliant with the whois protocol described in RFC 3912.
 
 To launch the server::
 
