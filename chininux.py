@@ -118,6 +118,7 @@ class AddressDirectory():
             currentsection = "\n".join([title.get_text() for title in titles if title != None])
             self.records.extend(self.__processtable(t, currentsection))
     def refresh(self):
+        self.records = []
         for url in self.urls:
             self.retrieveandparse(url)
     def search(self, query):
