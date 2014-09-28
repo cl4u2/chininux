@@ -138,6 +138,9 @@ class AddressDirectory():
         queryresults = [(ratio, record) for (ratio, record) in queryresults if ratio > 0.0]
         queryresults.sort(key=lambda tup: tup[0])
         results = [record for (ratio, record) in queryresults]
+        if len(results) == 0:
+            results = ["%% Sorry, no record matched your query: %s\n" % query]
+            return results
         return [settings.headerstring] + results + [settings.footerstring]
 
 
