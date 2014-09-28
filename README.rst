@@ -8,7 +8,7 @@ Its purpose is to return the information stored in HTML tables on `wiki.ninux.or
 
 ninux.org
 ---------
-ninux.org is a community network with decentralized ownership and management in Rome, Italy.
+ninux.org is a community network with decentralized ownership and management, located in Italy.
 More information can be found at http://wiki.ninux.org and http://map.ninux.org
 
 
