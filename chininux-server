@@ -22,6 +22,7 @@ from chininux import *
 import settings
 import threading
 from SocketServer import BaseRequestHandler, ThreadingTCPServer
+import socket
 import time
 import sys
 
@@ -59,12 +60,20 @@ class WhoisRequestHandler(BaseRequestHandler):
         self.request.sendall(response)
 
 class WhoisServer(ThreadingTCPServer):
-    def __init__(self, bindPort=43, bindAddress="0.0.0.0", refreshInterval = 3600):
+    address_family = socket.AF_INET6
+    def __init__(self, bindPort=43, bindAddress="::", refreshInterval = 3600):
         self.ar = AddressRetriever(refreshInterval=refreshInterval)
         self.ar.daemon = True
         self.ar.start()
         self.refreshInterval = refreshInterval
         ThreadingTCPServer.__init__(self, (bindAddress, bindPort), WhoisRequestHandler)
+    def server_bind(self):
+        self.socket.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 0)
+        # from SocketServer.py
+        if self.allow_reuse_address:
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.socket.bind(self.server_address)
+        self.server_address = self.socket.getsockname()
 
 if __name__ == "__main__":
     try:

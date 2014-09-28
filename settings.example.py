@@ -10,7 +10,7 @@ GIURLS = ["http://wiki.ninux.org/GestioneIndirizzi",
 
 # chininux-server parameters
 bindPort = 43
-bindAddress = "0.0.0.0"
+bindAddress = "::"
 refreshInterval = 3600
 
 # fixed header and footer that are printed at each query
