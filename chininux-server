@@ -23,6 +23,7 @@ import settings
 import threading
 from SocketServer import BaseRequestHandler, ThreadingTCPServer
 import time
+import sys
 
 class AddressRetriever(threading.Thread):
     def __init__(self, refreshInterval=3600):
@@ -60,11 +61,16 @@ class WhoisRequestHandler(BaseRequestHandler):
 class WhoisServer(ThreadingTCPServer):
     def __init__(self, bindPort=43, bindAddress="0.0.0.0", refreshInterval = 3600):
         self.ar = AddressRetriever(refreshInterval=refreshInterval)
+        self.ar.daemon = True
         self.ar.start()
         self.refreshInterval = refreshInterval
         ThreadingTCPServer.__init__(self, (bindAddress, bindPort), WhoisRequestHandler)
 
 if __name__ == "__main__":
-    whoisServer = WhoisServer(settings.bindPort, settings.bindAddress, settings.refreshInterval)
+    try:
+        whoisServer = WhoisServer(settings.bindPort, settings.bindAddress, settings.refreshInterval)
+    except Exception, e:
+        print e
+        sys.exit(1)
     whoisServer.serve_forever()
 
