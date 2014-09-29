@@ -122,11 +122,11 @@ class AddressDirectory():
         else:
             return
         soup = BeautifulSoup(html_doc)
-        pagetitle = soup.find("title")
+        pagetitle = soup.find("title").get_text()
         currentsection = ""
         for t in soup.find_all("table"):
-            titles = [pagetitle] + [t.find_previous(tag) for tag in ["h1", "h2", "h3"]]
-            currentsection = "\n".join([title.get_text() for title in titles if title != None])
+            titles = [t.find_previous(tag) for tag in ["h1", "h2", "h3"]]
+            currentsection = "\n".join([pagetitle, url] + [title.get_text() for title in titles if title != None])
             self.records.extend(self.__processtable(t, currentsection))
     def refresh(self):
         self.records = []
