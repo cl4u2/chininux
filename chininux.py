@@ -25,7 +25,9 @@ from ipaddress import *
 import settings
 
 class Record():
+    "an (IP address) record"
     def __cleanlabel(self, label):
+        "remove some special characters from the name"
         return label.replace(' ', '_').replace('.', '_').replace('/', '_').strip()
     def __init__(self, section, labels):
         self.section = section # the name of the page section
@@ -35,6 +37,7 @@ class Record():
         if '-' in value:
             self.__dict__[n] = value
             i = 0
+            # we need this because some cells may contain two addresses separated by a dash
             for v in value.split('-'):
                 n = "%s_%s" % (n, i)
                 setattr(self, n, v)
@@ -50,7 +53,7 @@ class Record():
             except:
                 self.__dict__[n] = value
     def search(self, q):
-        "search q in all field values and return a similarity ratio"
+        "search q in all field values and return a similarity ratio between 0 and 1"
         try:
             address = ip_address(unicode(q.strip()))
         except:
@@ -66,6 +69,7 @@ class Record():
                 r += 1.0 * v.prefixlen / v.max_prefixlen
         return r
     def __repr__(self):
+        "return a RIPE-whois-like representation"
         r = ""
         if len(self.section) > 0:
             r += "% "
@@ -90,7 +94,7 @@ class AddressDirectory():
         self.urls = urls
         self.records = []
     def __processtable(self, table, currentsection=""):
-        "return a list of Record objects from a table"
+        "return a list of Record objects from an HTML table"
         rrecords = []
         labels = []
         for tr in table.find_all('tr'):
@@ -133,7 +137,7 @@ class AddressDirectory():
                 print "could not retrieve url %s: %s" % (url, e)
                 continue
     def search(self, query):
-        "return all the records that match a query"
+        "return all the records that match a query, and sort them by increasing similarity ratio"
         queryresults = [(record.search(query), record) for record in self.records]
         queryresults = [(ratio, record) for (ratio, record) in queryresults if ratio > 0.0]
         queryresults.sort(key=lambda tup: tup[0])

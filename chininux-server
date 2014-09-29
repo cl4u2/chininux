@@ -29,16 +29,20 @@ import sys
 class AddressRetriever(threading.Thread):
     def __init__(self, refreshInterval=3600):
         self.alock = threading.Lock()
+        # update one AddressDirectory while using the other
         self.adirs = [AddressDirectory(settings.GIURLS), AddressDirectory(settings.GIURLS)]
         self.currentadir = 0
         self.refreshInterval = refreshInterval
         self.ready = False
         threading.Thread.__init__(self)
     def run(self):
+        # refresh the records every refreshInterval seconds
         while True:
+            # update one AddressDirectory while using the other
             nextcurrentadir = (self.currentadir + 1) % 2
             self.adirs[nextcurrentadir].refresh()
             print "fresh!"
+            # switch the current AddressDirectory
             self.alock.acquire()
             self.currentadir = nextcurrentadir
             self.ready = True
@@ -68,6 +72,7 @@ class WhoisServer(ThreadingTCPServer):
         self.refreshInterval = refreshInterval
         ThreadingTCPServer.__init__(self, (bindAddress, bindPort), WhoisRequestHandler)
     def server_bind(self):
+        # dual-stack IPv4-IPv6
         self.socket.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 0)
         # from SocketServer.py
         if self.allow_reuse_address:
