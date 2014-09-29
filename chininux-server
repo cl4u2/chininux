@@ -69,7 +69,6 @@ class WhoisServer(ThreadingTCPServer):
         self.ar = AddressRetriever(refreshInterval=refreshInterval)
         self.ar.daemon = True
         self.ar.start()
-        self.refreshInterval = refreshInterval
         ThreadingTCPServer.__init__(self, (bindAddress, bindPort), WhoisRequestHandler)
     def server_bind(self):
         # dual-stack IPv4-IPv6
