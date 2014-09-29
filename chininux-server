@@ -49,7 +49,7 @@ class AddressRetriever(threading.Thread):
         if self.ready:
             r = self.adirs[self.currentadir].search(query)
         else:
-            r = ["% Sorry, the whois server is not ready yet :(\n"]
+            r = ["% Sorry, the whois server is not ready yet :(\n% Please try again in a few seconds."]
         self.alock.release()
         return r
 
