@@ -1,0 +1,3 @@
+[submodule "phpipam"]
+	path = phpipam
+	url = https://github.com/cl4u2/phpipam-pythonlib.git
