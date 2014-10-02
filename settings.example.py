@@ -5,7 +5,8 @@ GIURLS = ["http://wiki.ninux.org/GestioneIndirizzi",
           "http://wiki.ninux.org/IndirizziCalabria",
           "http://wiki.ninux.org/Firenze/GestioneIndirizzi",
           "http://wiki.ninux.org/IndirizziMarche",
-          "http://wiki.ninux.org/indirizzi-sicilia"
+          "http://wiki.ninux.org/indirizzi-sicilia",
+          "http://chininux:1a4fa39d2635bcd1bbcf0341d5030b60@indirizzi.frm.ninux.org",
          ]
 
 # chininux-server parameters
@@ -17,7 +18,4 @@ refreshInterval = 3600
 headerstring = "% This is the chininux ninux.org Query Service.\n% The objects don't follow a specific format.\n"
 footerstring = "\n% This query was served by the chininux ninux.org Query Service.\n"
 
-# phpipam
-phpipam_api_id = "chininux"
-phpipam_api_key = "1a4fa39d2635bcd1bbcf0341d5030b60"
 
