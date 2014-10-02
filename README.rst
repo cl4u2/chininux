@@ -19,6 +19,8 @@ chininux quick start
 
     git clone https://github.com/cl4u2/chininux.git
     cd chininux
+    git submodule init
+    git submodule update
     cp settings.example.py settings.py
     sudo pip install -r requirements.txt
 
