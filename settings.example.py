@@ -6,7 +6,7 @@ GIURLS = ["http://wiki.ninux.org/GestioneIndirizzi",
           "http://wiki.ninux.org/Firenze/GestioneIndirizzi",
           "http://wiki.ninux.org/IndirizziMarche",
           "http://wiki.ninux.org/indirizzi-sicilia",
-          "http://chininux:1a4fa39d2635bcd1bbcf0341d5030b60@indirizzi.frm.ninux.org",
+          "phpipam://chininux:1a4fa39d2635bcd1bbcf0341d5030b60@indirizzi.frm.ninux.org"
          ]
 
 # chininux-server parameters
