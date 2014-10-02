@@ -22,7 +22,9 @@ import urllib2
 from bs4 import BeautifulSoup
 import sys
 from ipaddress import *
+from phpipam.phpipam import PHPIPAM
 import settings
+import json
 
 class Record():
     "an (IP address) record"
@@ -112,9 +114,30 @@ class AddressDirectory():
                     setattr(r, label, data)
                 rrecords.append(r)
         return rrecords
+    def __process_phpipam(self, server, api_id, api_key):
+        rrecords = []
+        ipam = PHPIPAM(server, api_id, api_key)
+        jsubnets = ipam.read_subnets()
+        subnets = json.loads(jsubnets)
+        labels = ['subnet', 'description']
+        for subnet in subnets['data']:
+            r = Record("phpipam: " + server, labels)
+            r.subnet = "%s/%s" % (unicode(subnet['subnet']), unicode(subnet['mask']))
+            r.description = unicode(subnet['description'])
+            rrecords.append(r)
+        return rrecords
     def retrieveandparse(self, url):
         "fetch an URL content and populate a list of corresponding Record objects"
-        if url.startswith("http://") or url.startswith("https://"):
+        if url.startswith("phpipam://"):
+            try:
+                api_id, api_key = url[10:].split("@")[0].split(":")
+                server = url.split("@")[1]
+            except Exception, e:
+                print "%s: Invalid or missing api id and api key [%s]" % (url, e)
+                return
+            self.records.extend(self.__process_phpipam(server, api_id, api_key))
+            return
+        elif url.startswith("http://") or url.startswith("https://"):
             html_doc = urllib2.urlopen(url)
         elif url.startswith("file://"):
             filename = url[7:]
