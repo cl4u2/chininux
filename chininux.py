@@ -119,11 +119,12 @@ class AddressDirectory():
         ipam = PHPIPAM(server, api_id, api_key)
         jsubnets = ipam.read_subnets()
         subnets = json.loads(jsubnets)
-        labels = ['subnet', 'description']
-        for subnet in subnets['data']:
+        for s in subnets['data']:
+            labels = s.keys() + ["fullsubnet"]
             r = Record("phpipam: " + server, labels)
-            r.subnet = "%s/%s" % (unicode(subnet['subnet']), unicode(subnet['mask']))
-            r.description = unicode(subnet['description'])
+            for label in labels[:-1]: #exclude fullsubnet
+                setattr(r, label, unicode(s[label]))
+            setattr(r, "fullsubnet", "%s/%s" % (unicode(s['subnet']), unicode(s['mask'])))
             rrecords.append(r)
         return rrecords
     def retrieveandparse(self, url):
