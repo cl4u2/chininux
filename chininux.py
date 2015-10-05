@@ -131,6 +131,7 @@ class AddressDirectory():
     def retrieveandparse(self, url):
         "fetch an URL content and populate a list of corresponding Record objects"
         if url.startswith("phpipam://"):
+            # fetch phpIPAM records
             try:
                 api_id, api_key = url[10:].split("@")[0].split(":")
                 server = url.split("@")[1]
@@ -146,6 +147,8 @@ class AddressDirectory():
             html_doc = open(filename)
         else:
             return
+        # take an HTML document, either local (file://) or retrieved from the Web (http://, https://)
+        # and parse all the HTML tables contained in it
         soup = BeautifulSoup(html_doc)
         pagetitle = soup.find("title").get_text()
         currentsection = ""
