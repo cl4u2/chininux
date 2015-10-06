@@ -65,11 +65,12 @@ class WhoisRequestHandler(BaseRequestHandler):
 
 class WhoisServer(ThreadingTCPServer):
     address_family = socket.AF_INET6
-    def __init__(self, bindPort=43, bindAddress="::", refreshInterval = 3600):
+    def __init__(self, bindPort=43, bindAddress="::", refreshInterval = 3600, allow_reuse_address = True):
         self.ar = AddressRetriever(refreshInterval=refreshInterval)
         self.ar.daemon = True
         self.ar.start()
         ThreadingTCPServer.__init__(self, (bindAddress, bindPort), WhoisRequestHandler)
+        self.allow_reuse_address = allow_reuse_address
     def server_bind(self):
         # dual-stack IPv4-IPv6
         self.socket.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 0)
