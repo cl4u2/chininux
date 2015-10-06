@@ -22,6 +22,7 @@ import urllib2
 from bs4 import BeautifulSoup
 import sys
 from ipaddress import *
+from netaddr import EUI
 from phpipam.phpipam import PHPIPAM
 import settings
 import json
@@ -47,6 +48,13 @@ class Record():
         else:
             try:
                 v = value.strip()
+                mac = EUI(unicode(v))
+                self.__dict__[n] = mac
+                return
+            except:
+                pass
+            try:
+                v = value.strip()
                 subnet = ip_network(unicode(v), strict=False)
                 self.__dict__[n] = subnet
             except ValueError,e :
@@ -59,16 +67,25 @@ class Record():
         try:
             address = ip_address(unicode(q.strip()))
         except:
-            return 0.0
+            try:
+                address = EUI(unicode(q.strip()))
+            except:
+                return 0.0
         r = 0.0
         for k, v in self.__dict__.iteritems():
             if k in ["section", "labels"]:
                 continue
-            if not type(v) is IPv4Network and not type(v) is IPv6Network:
-                continue
-            # v is a network
-            if address in v:
-                r += 1.0 * v.prefixlen / v.max_prefixlen
+            if type(address) is EUI:
+                if type(v) is EUI:
+                    if v == address:
+                        r += 1.0
+            else:
+                assert type(address) is IPv4Address or type(address) is IPv6Address
+                if not type(v) is IPv4Network and not type(v) is IPv6Network:
+                    continue
+                # v is a network
+                if address in v:
+                    r += 1.0 * v.prefixlen / v.max_prefixlen
         return r
     def __repr__(self):
         "return a RIPE-whois-like representation"
