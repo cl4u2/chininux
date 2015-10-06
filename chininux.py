@@ -128,6 +128,19 @@ class AddressDirectory():
             setattr(r, "subnet", "%s/%s" % (unicode(s['subnet']), unicode(s['mask'])))
             rrecords.append(r)
         return rrecords
+    def __process_nodeshot_api(self, url):
+        rrecords = []
+        httpurl = "http" + url[8:] + "/api/v1/whois/?format=json"
+        nsapi = urllib2.urlopen(httpurl)
+        jaddresses = " ".join(nsapi.readlines())
+        addresses = json.loads(jaddresses)
+        for a in addresses:
+            labels = a.keys()
+            r = Record("nodeshot: " + url, labels)
+            for label in labels:
+               setattr(r, label, unicode(a[label]))
+            rrecords.append(r)
+        return rrecords
     def retrieveandparse(self, url):
         "fetch an URL content and populate a list of corresponding Record objects"
         if url.startswith("phpipam://"):
@@ -139,6 +152,10 @@ class AddressDirectory():
                 print "%s: Invalid or missing api id and api key [%s]" % (url, e)
                 return
             self.records.extend(self.__process_phpipam(server, api_id, api_key))
+            return
+        elif url.startswith("nodeshot://") or url.startswith("nodeshots://"):
+            # transform the nodeshot:// or nodeshots:// URL into http:// or https://
+            self.records.extend(self.__process_nodeshot_api(url))
             return
         elif url.startswith("http://") or url.startswith("https://"):
             html_doc = urllib2.urlopen(url)
