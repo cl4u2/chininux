@@ -9,6 +9,7 @@ GIURLS = ["http://wiki.ninux.org/GestioneIndirizzi",
           "http://wiki.ninux.org/IndirizziVerona",
           "http://wiki.ninux.org/Lombardia/GestioneIndirizzi",
           "http://wiki.ninux.org/indirizzi-sicilia",
+          "http://wiki.ninux.org/IndirizziCampania",
           "phpipam://chininux:1a4fa39d2635bcd1bbcf0341d5030b60@ipam.ninux.org",
           "nodeshot://ninux.nodeshot.org"
          ]
