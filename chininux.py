@@ -30,9 +30,10 @@ import json
 class Record():
     "an (IP address) record"
     def __cleanlabel(self, label):
-        "remove some special characters from the name"
+        "remove some special characters from the label name"
         return label.replace(' ', '_').replace('.', '_').replace('/', '_').replace('&','_').strip()
     def __init__(self, section, labels):
+        # the labels will be the only properties that will be printed out in the __repr__ function
         self.section = section # the name of the page section
         self.labels = [self.__cleanlabel(l) for l in labels] # to preserve the order of the table columns
     def __setattr__(self, name, value):
