@@ -48,13 +48,19 @@ class Record():
         else:
             try:
                 v = value.strip()
-                mac = EUI(unicode(v))
+                mac = EUI(unicode(v), version=48)
                 self.__dict__[n] = mac
                 return
             except:
                 pass
             try:
                 v = value.strip()
+                if not '/' in v:
+                    ipa = ip_address(unicode(v))
+                    if type(ipa) is IPv4Address:
+                        v += "/32"
+                    elif type(ipa) is IPv6Address:
+                        v += "/128"
                 subnet = ip_network(unicode(v), strict=False)
                 self.__dict__[n] = subnet
             except ValueError,e :
