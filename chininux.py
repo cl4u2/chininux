@@ -37,11 +37,15 @@ class Record():
         self.labels = [self.__cleanlabel(l) for l in labels] # to preserve the order of the table columns
     def __setattr__(self, name, value):
         n = self.__cleanlabel(name)
+        # we need this because some cells may contain two addresses separated by a dash
         if '-' in value:
+            value = value.replace("-", " ")
+        if ' ' in value:
             self.__dict__[n] = value
             i = 0
-            # we need this because some cells may contain two addresses separated by a dash
-            for v in value.split('-'):
+            for v in value.split(' '):
+                if len(v) == 0:
+                    continue
                 n = "%s_%s" % (n, i)
                 setattr(self, n, v)
                 i+=1
