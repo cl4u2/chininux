@@ -50,5 +50,5 @@ to test it::
 
 
 .. _`wiki.ninux.org`: http://wiki.ninux.org
-.. _`phpipam instance`: http://indirizzi.frm.ninux.org
+.. _`phpipam instance`: http://ipam.ninux.org
 
