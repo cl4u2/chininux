@@ -31,7 +31,7 @@ class Record():
     "an (IP address) record"
     def __cleanlabel(self, label):
         "remove some special characters from the name"
-        return label.replace(' ', '_').replace('.', '_').replace('/', '_').strip()
+        return label.replace(' ', '_').replace('.', '_').replace('/', '_').replace('&','_').strip()
     def __init__(self, section, labels):
         self.section = section # the name of the page section
         self.labels = [self.__cleanlabel(l) for l in labels] # to preserve the order of the table columns
