@@ -4,7 +4,7 @@ chininux whois service
 
 **chininux** is a **whois service** especially designed for the ninux.org community network.
 
-Its purpose is to return the information stored in HTML tables on `wiki.ninux.org`_ and in the ninux.org `phpipam instance`_ as a whois service.
+Its purpose is to return as a whois service the information stored in HTML tables on `wiki.ninux.org`_,  in the ninux.org `phpipam instance`_ and in `nodeshot`.
 
 ninux.org
 ---------
@@ -51,4 +51,5 @@ to test it::
 
 .. _`wiki.ninux.org`: http://wiki.ninux.org
 .. _`phpipam instance`: http://ipam.ninux.org
+.. _`nodeshot`: http://ninux.nodeshot.org
 
