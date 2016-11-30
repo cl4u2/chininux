@@ -32,6 +32,16 @@ class Record():
     def __cleanlabel(self, label):
         "remove some special characters from the label name"
         return label.replace(' ', '_').replace('.', '_').replace('/', '_').replace('&','_').strip()
+    def __cleanhost(self, host):
+        "remove special characters from the host name"
+        r = []
+        for c in host:
+            if ord(c) in range(ord('a'), ord('z')+1) + range(ord('A'), ord('Z')+1) + range(ord('0'), ord('9')+1):
+                    r.append(c)
+            else:
+                    r.append('_')
+        return "".join(r)
+
     def __init__(self, section, labels):
         # the labels will be the only properties that will be printed out in the __repr__ function
         self.section = section # the name of the page section
@@ -98,6 +108,28 @@ class Record():
                 if address in v:
                     r += 1.0 * v.prefixlen / v.max_prefixlen
         return r
+    def hosts(self):
+        "return the host stored in this object or None"
+        hostname = ""
+        hostaddr = ""
+        node = ""
+        device = ""
+        for k, v in self.__dict__.iteritems():
+            if k == "node":
+                node = self.__cleanhost(v)
+            if k == "device":
+                device = self.__cleanhost(v)
+            if type(v) is IPv4Network:
+                if v.prefixlen == 32:
+                    hostaddr = str(v.network_address)
+            elif type(v) is IPv6Network:
+                if v.prefixlen == 128:
+                    hostaddr = str(v.network_address)
+        hostname = ".".join([node, device])
+        if len(hostname) < 2 or len(hostaddr) == 0:
+            return None
+        return (hostaddr, hostname)
+
     def __repr__(self):
         "return a RIPE-whois-like representation"
         r = ""
@@ -219,5 +251,8 @@ class AddressDirectory():
             results = ["%% Sorry, no record matched your query: %s\n" % query]
             return results
         return [settings.headerstring] + results + [settings.footerstring]
+
+    def hosts(self):
+        return [record.hosts() for record in self.records if record.hosts() != None]
 
 
