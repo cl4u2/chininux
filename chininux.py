@@ -194,7 +194,7 @@ class AddressDirectory():
             return
         # take an HTML document, either local (file://) or retrieved from the Web (http://, https://)
         # and parse all the HTML tables contained in it
-        soup = BeautifulSoup(html_doc)
+        soup = BeautifulSoup(html_doc, "lxml")
         pagetitle = soup.find("title").get_text()
         currentsection = ""
         for t in soup.find_all("table"):
